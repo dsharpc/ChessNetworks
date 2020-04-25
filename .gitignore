@@ -1,0 +1,5 @@
+data/neo4j/data/*
+data/neo4j/import/*
+data/neo4j/logs/*
+
+.DStore

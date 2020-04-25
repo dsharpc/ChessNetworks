@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    neodb:
+        image: 'neo4j:3.5'
+        environment:
+            - NEO4J_AUTH=neo4j/pass123456
+            - NEO4J_dbms_security_procedures_unrestricted=gds.*
+        ports:
+            - '7474:7474'
+            - '7687:7687'
+        volumes:
+            - ./data/neo4j/data:/data
+            - ./data/neo4j/logs:/logs
+            - ./data/neo4j/import:/var/lib/neo4j/import
+            - ./data/neo4j/plugins:/plugins
+    data_manager:
+        build:
+            context: data_parser
+            dockerfile: Dockerfile
+        environment:
+            - NEO4J_USER=neo4j
+            - NEO4J_PASS=pass123456
+            - NEO4J_HOST=neodb
+        volumes:
+            - ./data_parser:/app
+        ports:
+            -  "8888:8888"
+        tty: True
+        entrypoint: jupyter lab --allow-root --ip=0.0.0.0
